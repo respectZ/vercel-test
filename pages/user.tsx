@@ -6,16 +6,21 @@ import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import axios from "axios";
 
-const fetcher = async (...args) => fetch(...args).then((res) => res.json());
+// const fetcher = async (...args: any[]) => fetch(...args).then((res) => res.json());
+const fetcher = async (arg: any, ...args: any[]) => fetch(arg, ...args).then((res) => res.json());
 
+type User = {
+    id: number;
+    nama: string;
+}
 
 const User: NextPage = () => {
-    const { data, error } = useSWR('/api/user', fetcher);
-    if (error) return <div>Failed to load</div>;
-    if (!data) return <div>Loading...</div>;
+    const r = useSWR('/api/user', fetcher);
+    if (r.error) return <div>Failed to load</div>;
+    if (!r.data) return <div>Loading...</div>;
     return (
         <div className={styles.container}>
-            {data.map((user) => (
+            {(r.data as User[]).map((user) => (
                 <div key={user.id}>
                     <h1>{user.nama}</h1>
                 </div>
