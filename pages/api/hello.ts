@@ -9,5 +9,16 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-  res.status(200).json({ name: 'John Doe' })
+  const method = req.method;
+  switch (method) {
+    case 'GET':
+      res.status(200).json({ name: '[GET] John Doe' })
+      break;
+    case 'POST':
+      res.status(200).json({ name: '[POST] John Doe' })
+      break;
+    default:
+      res.setHeader('Allow', ['GET', 'POST'])
+      res.status(405).end(`Method ${method} Not Allowed`)
+  }
 }
